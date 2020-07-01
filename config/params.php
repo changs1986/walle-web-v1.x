@@ -39,4 +39,5 @@ return [
         ],
         'ssl'            => false,
     ],
+    'publish_queue' => 'publish_queue',
 ];

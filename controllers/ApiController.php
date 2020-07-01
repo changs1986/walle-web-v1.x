@@ -2,9 +2,7 @@
 
 namespace app\controllers;
 
-use yii;
-use yii\data\Pagination;
-use yii\helpers\Url;
+use Yii;
 use app\components\Controller;
 use app\models\Task;
 use app\models\Project;
@@ -36,7 +34,8 @@ class ApiController extends Controller
         if (!$task->save()) {
             var_dump($task->errors);
         }
-        (new WalleLogic())->startDeploy($task->id);
+        //发布时间太久了，采用队列移步发布的方式处理
+        Yii::$app->redis->lpush(Yii::$app->params['user.publish_queue'], $task->id);
     }
 }
 

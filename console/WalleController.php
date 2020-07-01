@@ -13,6 +13,7 @@ use yii;
 use yii\console\Controller;
 use yii\helpers\Console;
 use app\components\Command;
+use app\logic\WalleLogic;
 
 class WalleController extends Controller {
 
@@ -55,6 +56,19 @@ class WalleController extends Controller {
         echo "\033[32m\n--------------------------------------------------------", PHP_EOL;
         echo "Congratulations To Upgrade. Your Walle Current Version:\033[0m", PHP_EOL;
         $this->runAction('index', ['interactive' => $this->interactive]);
+    }
+
+    public function actionDeamonPublisher()
+    {
+        do {
+            $taskId = Yii::$app->redis->rpop(Yii::$app->params['user.publish_queue']);
+            if (empty($taskId)) {
+                sleep(10);
+            }
+            echo "\nready to push task:{$taskId}";
+            (new WalleLogic())->startDeploy($taskId);
+            echo "\npublish done";
+        } while(1);
     }
 
     /**

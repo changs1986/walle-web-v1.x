@@ -16,14 +16,26 @@ class ApiController extends Controller
     public function actionIndex()
     {
         $param = file_get_contents('php://input');
+        //@todo remove later,just for debug
+        error_log($param, 3, '/tmp/webhook.log');
         $object = json_decode($param, 1);
         if ($object['object_kind'] != 'merge_request' && $object['object_attributes']['merge_status'] != 'can_be_merged') {
             return;
         }
         $commitId = $object['object_attributes']['merge_commit_sha'];
+        if (empty($commitId)) {
+            return;
+        }
         $user = User::find()->where(['username' => $object['object_attributes']['last_commit']['author']['email']])->one();
-        $project = Project::find()->where(['name' => $object['project']['name']])->one();
-
+        if (empty($user)) {
+            Yii::error("user:{$object['object_attributes']['last_commit']['author']['email']} not found");
+            return;
+        }
+        $project = Project::find()->where(['name' => $object['project']['name'], 'level' => '3'])->one();
+        if (empty($project)) {
+            Yii::error("user:{$object['project']['name']} not found");
+            return;
+        }
         $task = new Task();
         $task->title = $object['object_attributes']['last_commit']['message'];
         $task->user_id = $user->id;

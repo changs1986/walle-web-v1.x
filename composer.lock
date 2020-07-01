@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71559e455d4b983ec958fb56954a351a",
+    "content-hash": "2b9e58b8e1ca650b7271d4fd5f1765e0",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -317,6 +317,47 @@
                 "html"
             ],
             "time": "2018-02-23T01:58:20+00:00"
+        },
+        {
+            "name": "pyurin/yii2-redis-ha",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pyurin/yii2-redis-ha.git",
+                "reference": "b071998d70e85376bf58a0439c9c642ff7dd8393"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pyurin/yii2-redis-ha/zipball/b071998d70e85376bf58a0439c9c642ff7dd8393",
+                "reference": "b071998d70e85376bf58a0439c9c642ff7dd8393",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2-redis": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "pyurin\\yii\\redisHa\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Petr Yurin",
+                    "email": "p.yurin@gmail.com"
+                }
+            ],
+            "description": "Basic redis-ha client",
+            "keywords": [
+                "redis",
+                "sentinel",
+                "yii2"
+            ],
+            "time": "2017-11-14T10:34:43+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

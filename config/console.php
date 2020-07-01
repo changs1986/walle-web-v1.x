@@ -12,6 +12,7 @@ return [
     'extensions'          => $web['extensions'],
     'components'          => [
         'db'      => $web['components']['db'],
+        'redis'   => $web['components']['redis'],
         'log'     => [
             'targets' => [
                 [

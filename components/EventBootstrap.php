@@ -22,7 +22,7 @@ class EventBootstrap implements BootstrapInterface
             $aid = $event->action->id;
             $cid = $event->action->controller->id;
             if (Yii::$app->user->id) return true;
-            if ($cid == 'site') {
+            if ($cid == 'site' || $cid == 'api') {
                 return true;
             }
             if (!Yii::$app->request->getIsAjax()) {

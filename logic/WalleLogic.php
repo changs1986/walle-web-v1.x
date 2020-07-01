@@ -46,6 +46,8 @@ class WalleLogic
      */
     protected $walleFolder;
 
+    protected $uid;
+
     public $enableCsrfValidation = false;
 
     /**
@@ -53,8 +55,9 @@ class WalleLogic
      *
      * @throws \Exception
      */
-    public function startDeploy($taskId)
+    public function startDeploy($taskId, $uid)
     {
+        $this->uid = $uid;
         if (!$taskId) {
             throw new \InvalidArgumentException("task id is required");
         }
@@ -146,7 +149,7 @@ class WalleLogic
         $ret = $this->walleFolder->initRemoteVersion($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_PERMSSION, $duration);
+        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_PERMSSION, $duration, $this->uid);
 
         if (!$ret) {
             throw new \Exception(yii::t('walle', 'init deployment workspace error'));
@@ -169,7 +172,7 @@ class WalleLogic
         $ret = $revision->updateToVersion($this->task); // 更新到指定版本
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($revision, $this->task->id, Record::ACTION_CLONE, $duration);
+        Record::saveRecord($revision, $this->task->id, Record::ACTION_CLONE, $duration, $this->uid);
 
         if (!$ret) {
             throw new \Exception(yii::t('walle', 'update code error'));
@@ -191,7 +194,7 @@ class WalleLogic
         $ret = $this->walleTask->preDeploy($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_PRE_DEPLOY, $duration);
+        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_PRE_DEPLOY, $duration, $this->uid);
 
         if (!$ret) {
             throw new \Exception(yii::t('walle', 'pre deploy task error'));
@@ -214,7 +217,7 @@ class WalleLogic
         $ret = $this->walleTask->postDeploy($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_POST_DEPLOY, $duration);
+        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_POST_DEPLOY, $duration, $this->uid);
 
         if (!$ret) {
             throw new \Exception(yii::t('walle', 'post deploy task error'));
@@ -245,7 +248,7 @@ class WalleLogic
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
 
-        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
+        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration, $this->uid);
 
         return true;
     }
@@ -279,7 +282,7 @@ class WalleLogic
         $ret = $this->walleTask->runRemoteTaskCommandPackage($cmd, $delay);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);
+        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration, $this->uid);
         if (!$ret) {
             throw new \Exception(yii::t('walle', 'update servers error'));
         }

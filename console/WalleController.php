@@ -58,16 +58,17 @@ class WalleController extends Controller {
         $this->runAction('index', ['interactive' => $this->interactive]);
     }
 
-    public function actionDeamonPublisher()
+    public function actionAsyncPublish()
     {
         do {
-            $taskId = Yii::$app->redis->rpop(Yii::$app->params['user.publish_queue']);
-            if (empty($taskId)) {
+            $data = Yii::$app->redis->rpop(Yii::$app->params['publish_queue']);
+            if (empty($data)) {
                 sleep(10);
             }
-            echo "\nready to push task:{$taskId}";
-            (new WalleLogic())->startDeploy($taskId);
-            echo "\npublish done";
+            $data = json_decode($data, true);
+            echo "\ntask:{$data['task_id']} ready to push ";
+            (new WalleLogic())->startDeploy($data['task_id'], $data['uid']);
+            echo "\ntask:{$data['task_id']} publish done";
         } while(1);
     }
 

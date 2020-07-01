@@ -24,19 +24,16 @@ return [
             'username'  => isset($_ENV['WALLE_DB_USER']) ? $_ENV['WALLE_DB_USER'] : 'root',
             'password'  => isset($_ENV['WALLE_DB_PASS']) ? $_ENV['WALLE_DB_PASS'] : '',
         ],
+        //使用sendmail发布
         'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => 'mail',
             'transport' => [
-                'host'       => isset($_ENV['WALLE_MAIL_HOST']) ? $_ENV['WALLE_MAIL_HOST'] : 'smtp.exmail.qq.com',     # smtp 发件地址
-                'username'   => isset($_ENV['WALLE_MAIL_USER']) ? $_ENV['WALLE_MAIL_USER'] : 'service@huamanshu.com',  # smtp 发件用户名
-                'password'   => isset($_ENV['WALLE_MAIL_PASS']) ? $_ENV['WALLE_MAIL_PASS'] : 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
-                'port'       => isset($_ENV['WALLE_MAIL_PORT']) ? $_ENV['WALLE_MAIL_PORT'] : 25,                       # smtp 端口
-                'encryption' => isset($_ENV['WALLE_MAIL_ENCRYPTION']) ? $_ENV['WALLE_MAIL_ENCRYPTION'] : 'tls',                    # smtp 协议
+                'class' => 'Swift_MailTransport',
             ],
+            'useFileTransport' => false,
             'messageConfig' => [
                 'charset' => 'UTF-8',
-                'from'    => [
-                  (isset($_ENV['WALLE_MAIL_EMAIL']) ? $_ENV['WALLE_MAIL_EMAIL'] : 'service@huamanshu.com') => (isset($_ENV['WALLE_MAIL_NAME']) ? $_ENV['WALLE_MAIL_NAME'] : '花满树出品'),
-                ],  # smtp 发件用户名(须与mail.transport.username一致)
             ],
         ],
         'request' => [

@@ -58,7 +58,7 @@ class WalleLogic
     public function startDeploy($taskId, $uid)
     {
         $this->uid = $uid;
-        if (!$taskId) {
+        if ($taskId <= 0) {
             throw new \InvalidArgumentException("task id is required");
         }
         $this->task = TaskModel::findOne($taskId);

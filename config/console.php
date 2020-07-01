@@ -13,6 +13,7 @@ return [
     'components'          => [
         'db'      => $web['components']['db'],
         'redis'   => $web['components']['redis'],
+        'mail'    => $web['components']['mail'],
         'log'     => [
             'targets' => [
                 [

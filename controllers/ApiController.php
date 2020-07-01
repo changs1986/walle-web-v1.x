@@ -35,7 +35,12 @@ class ApiController extends Controller
             var_dump($task->errors);
         }
         //发布时间太久了，采用队列移步发布的方式处理
-        Yii::$app->redis->lpush(Yii::$app->params['publish_queue'], json_encode(['task_id' => $task->id, 'uid' => $user->id]));
+        Yii::$app->redis->lpush(Yii::$app->params['publish_queue'], json_encode([
+            'task_id'   => $task->id,
+            'task_name' => $task->title,
+            'commit_id' => $task->commit_id,
+            'uid'       => $user->id,
+            'email'     => $user->email]));
     }
 }
 

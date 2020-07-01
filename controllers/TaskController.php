@@ -84,7 +84,6 @@ class TaskController extends Controller
      */
     public function actionSubmit($projectId = null)
     {
-
         // 为了方便用户更改表名，避免表名直接定死
         $projectTable = Project::tableName();
         $groupTable = Group::tableName();

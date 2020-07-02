@@ -18,8 +18,8 @@ class ApiController extends Controller
         $param = file_get_contents('php://input');
         //@todo remove later,just for debug
         error_log($param, 3, '/tmp/webhook.log');
-        if ($_SERVER['HTTP_X-Gitlab-Token'] != Yii::$app->params['gitlab_secrect_token']) {
-            Yii::error("Token:{$_SERVER['HTTP_X-Gitlab-Token']} Invalid");
+        if ($_SERVER['HTTP_X_GITLAB_TOKEN'] != Yii::$app->params['gitlab_secrect_token']) {
+            Yii::error("Token:{$_SERVER['HTTP_X_GITLAB_TOKEN']} Invalid");
             return;
         }
         $object = json_decode($param, 1);

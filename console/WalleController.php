@@ -58,25 +58,28 @@ class WalleController extends Controller {
         $this->runAction('index', ['interactive' => $this->interactive]);
     }
 
+    /**
+     * 发布频率不高，改为定时任务执行，避免守护进程长时间运行数据库socket/redis socket连接超时
+     */
     public function actionAsyncPublish()
     {
         do {
             $data = Yii::$app->redis->rpop(Yii::$app->params['publish_queue']);
             if (empty($data)) {
-                sleep(10);
+                break;
             }
+            echo "\n{$data}";
             $data = json_decode($data, true);
             if (!isset($data['task_id']) || !isset($data['uid']) || $data['task_id'] <= 0 || $data['uid'] <= 0) {
-                continue;
+                return;
             }
-
             echo "\ntask:{$data['task_id']} ready to push ";
             (new WalleLogic())->startDeploy($data['task_id'], $data['uid']);
             echo "\ntask:{$data['task_id']} publish done";
             $now = date('Y-m-d H:i:s');
             $content = "{$data['task_name']} 在{$now}发布成功, commit id: {$data['commit_id']}";
             \Yii::$app->mail->compose()->setTo($data['email'])->setSubject($data['task_name'] . ' 发布成功')->setTextBody($content)->send();
-        } while(1);
+        } while(true);
     }
 
     /**

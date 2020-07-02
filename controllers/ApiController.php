@@ -18,8 +18,12 @@ class ApiController extends Controller
         $param = file_get_contents('php://input');
         //@todo remove later,just for debug
         error_log($param, 3, '/tmp/webhook.log');
+        if ($_SERVER['HTTP_X-Gitlab-Token'] != Yii::$app->params['gitlab_secrect_token']) {
+            Yii::error("Token:{$_SERVER['HTTP_X-Gitlab-Token']} Invalid");
+            return;
+        }
         $object = json_decode($param, 1);
-        if ($object['object_kind'] != 'merge_request' && $object['object_attributes']['merge_status'] != 'can_be_merged') {
+        if ($object['object_kind'] != 'merge_request' && $object['object_attributes']['state'] != 'merged') {
             return;
         }
         $commitId = $object['object_attributes']['merge_commit_sha'];

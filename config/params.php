@@ -40,4 +40,5 @@ return [
         'ssl'            => false,
     ],
     'publish_queue' => 'publish_queue',
+    'gitlab_secrect_token' => '12345678900',
 ];

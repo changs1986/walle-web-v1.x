@@ -37,7 +37,7 @@ class ApiController extends Controller
         }
         $project = Project::find()->where(['name' => $object['project']['name'], 'level' => '3'])->one();
         if (empty($project)) {
-            Yii::error("user:{$object['project']['name']} not found");
+            Yii::error("project:{$object['project']['name']} not found");
             return;
         }
         $task = new Task();

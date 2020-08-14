@@ -23,7 +23,7 @@ class ApiController extends Controller
             return;
         }
         $object = json_decode($param, 1);
-        if ($object['object_kind'] != 'merge_request' && $object['object_attributes']['state'] != 'merged') {
+        if ($object['object_attributes']['target_branch'] != 'master' && $object['object_kind'] != 'merge_request' && $object['object_attributes']['state'] != 'merged') {
             return;
         }
         $commitId = $object['object_attributes']['merge_commit_sha'];
